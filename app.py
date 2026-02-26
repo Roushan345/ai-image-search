@@ -121,8 +121,29 @@ if uploaded_file is not None:
 
     st.subheader("Best Matches from uploaded image:")
 
-    for idx in top5.indices:
+    st.subheader("Top Matches")
 
-        st.image(image_paths[idx], width=300)
+cols = st.columns(3)
+
+for i, idx in enumerate(top5.indices):
+    with cols[i % 3]:
+        st.markdown(
+            """
+            <div style="
+                border:1px solid #444;
+                border-radius:10px;
+                padding:10px;
+                background-color:#0e1117;
+                text-align:center;
+            ">
+            """,
+            unsafe_allow_html=True
+        )
+
+        st.image(image_paths[idx], use_column_width=True)
+        st.caption(f"Similarity score: {scores[idx]:.3f}")
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
 
 
