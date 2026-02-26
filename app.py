@@ -6,7 +6,7 @@ import os
 
 # -------- Settings --------
 IMAGE_FOLDER = "images"
-EMBED_FILE = r"C:\Users\Roushan Srivastava\Desktop\AI_Data\embeddings.pt"
+EMBED_FILE = "embeddings.pt"
 
 st.title("🔍 AI Image Search Engine")
 
@@ -124,4 +124,5 @@ if uploaded_file is not None:
     for idx in top5.indices:
 
         st.image(image_paths[idx], width=300)
+
 
