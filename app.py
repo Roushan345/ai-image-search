@@ -77,14 +77,17 @@ if st.button("Search") and query:
     scores = (image_vectors @ text_features.T).squeeze()
     top5 = torch.topk(scores, k=min(5, len(scores)))
 
-   if 'top5' in locals():
+   # ---------- Show results ----------
+if 'top5' in locals():
 
     st.subheader("Top Matches")
 
     cols = st.columns(3)
 
     for i, idx in enumerate(top5.indices):
+
         with cols[i % 3]:
+
             st.markdown(
                 """
                 <div style="
@@ -145,6 +148,7 @@ for i, idx in enumerate(top5.indices):
         st.caption(f"Similarity score: {scores[idx]:.3f}")
 
         st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 
