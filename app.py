@@ -77,30 +77,31 @@ if st.button("Search") and query:
     scores = (image_vectors @ text_features.T).squeeze()
     top5 = torch.topk(scores, k=min(5, len(scores)))
 
+   if 'top5' in locals():
+
     st.subheader("Top Matches")
 
     cols = st.columns(3)
 
     for i, idx in enumerate(top5.indices):
-        score = scores[idx].item()
-        similarity = round(score * 100, 2)
-
         with cols[i % 3]:
-            st.image(image_paths[idx], use_container_width=True)
             st.markdown(
-                f"""
+                """
                 <div style="
-                    background:#111;
-                    padding:10px;
+                    border:1px solid #444;
                     border-radius:10px;
+                    padding:10px;
+                    background-color:#0e1117;
                     text-align:center;
-                    margin-bottom:15px;
                 ">
-                    <b>Similarity:</b> {similarity}%
-                </div>
                 """,
                 unsafe_allow_html=True
             )
+
+            st.image(image_paths[idx], use_column_width=True)
+            st.caption(f"Similarity score: {scores[idx]:.3f}")
+
+            st.markdown("</div>", unsafe_allow_html=True)
         # -------- Reverse image search --------
 if uploaded_file is not None:
 
@@ -144,6 +145,7 @@ for i, idx in enumerate(top5.indices):
         st.caption(f"Similarity score: {scores[idx]:.3f}")
 
         st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 
