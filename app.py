@@ -124,3 +124,4 @@ if uploaded_file is not None:
     for idx in top5.indices:
 
         st.image(image_paths[idx], width=300)
+
