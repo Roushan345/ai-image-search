@@ -5,7 +5,7 @@ from PIL import Image
 import os
 
 # -------- Settings --------
-IMAGE_FOLDER = r"C:\Users\Roushan Srivastava\Desktop"
+IMAGE_FOLDER = "images"
 EMBED_FILE = r"C:\Users\Roushan Srivastava\Desktop\AI_Data\embeddings.pt"
 
 st.title("🔍 AI Image Search Engine")
@@ -122,4 +122,5 @@ if uploaded_file is not None:
     st.subheader("Best Matches from uploaded image:")
 
     for idx in top5.indices:
+
         st.image(image_paths[idx], width=300)
