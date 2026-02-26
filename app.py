@@ -78,7 +78,21 @@ if st.button("Search") and query:
     top5 = torch.topk(scores, k=min(5, len(scores)))
 
    # ---------- Show results ----------
-if 'top5' in locals():
+ if st.button("Search") and query:
+
+    inputs = processor(text=[query], return_tensors="pt", padding=True)
+
+    with torch.no_grad():
+        text_features = model.get_text_features(
+            input_ids=inputs["input_ids"],
+            attention_mask=inputs["attention_mask"]
+        )
+
+    text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+
+    scores = (image_vectors @ text_features.T).squeeze()
+
+    top5 = torch.topk(scores, k=min(5, len(scores)))
 
     st.subheader("Top Matches")
 
@@ -105,51 +119,3 @@ if 'top5' in locals():
             st.caption(f"Similarity score: {scores[idx]:.3f}")
 
             st.markdown("</div>", unsafe_allow_html=True)
-        # -------- Reverse image search --------
-if uploaded_file is not None:
-
-    image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Uploaded Image", width=300)
-
-    inputs = processor(images=image, return_tensors="pt")
-
-    with torch.no_grad():
-        image_features = model.get_image_features(
-            pixel_values=inputs["pixel_values"]
-        )
-
-    image_vec = image_features / image_features.norm(dim=-1, keepdim=True)
-
-    scores = (image_vectors @ image_vec.T).squeeze()
-    top5 = torch.topk(scores, k=min(5, len(scores)))
-
-    st.subheader("Best Matches from uploaded image:")
-
-    st.subheader("Top Matches")
-
-cols = st.columns(3)
-
-for i, idx in enumerate(top5.indices):
-    with cols[i % 3]:
-        st.markdown(
-            """
-            <div style="
-                border:1px solid #444;
-                border-radius:10px;
-                padding:10px;
-                background-color:#0e1117;
-                text-align:center;
-            ">
-            """,
-            unsafe_allow_html=True
-        )
-
-        st.image(image_paths[idx], use_column_width=True)
-        st.caption(f"Similarity score: {scores[idx]:.3f}")
-
-        st.markdown("</div>", unsafe_allow_html=True)
-
-
-
-
-
